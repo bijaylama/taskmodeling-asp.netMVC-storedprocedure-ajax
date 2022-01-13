@@ -1,0 +1,62 @@
+﻿@model TaskProject.Models.UserModel
+@using System.Data;
+<h2>USERS</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+  
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact)
+        </th>
+      
+        <th></th>
+    </tr>
+
+@foreach (DataRow dr in Model.List.Rows)
+{
+    <tr>
+        <td>
+            @dr["UserID"]
+        </td>
+        <td>
+            @dr["FullName"]
+        </td>
+        <td>
+            @dr["Email"]
+        </td>
+        <td>
+            @dr["Password"]
+        </td>
+       
+        <td>
+            @dr["Address"]
+        </td>
+        <td>
+            @dr["Contact"]
+        </td>
+       
+        <td>
+
+            <a href="#" onclick="editUser('@Url.Action("Edit", "User", new { id = dr["UserID"]})')" class="btn btn-success">EDIT</a>
+            <a href="#" onclick="detailUser('@Url.Action("Details", "User", new { id = dr["UserID"] })')" class="btn btn-primary">DETAIL</a>
+            <a href="#" onclick="deleteUser('@Url.Action("Delete", "User", new { id = dr["UserID"] })')" class="btn btn-danger">DELETE</a>
+        </td>
+    </tr>
+}
+
+</table>

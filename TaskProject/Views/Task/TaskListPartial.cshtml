@@ -1,0 +1,233 @@
+﻿@model TaskProject.Models.TaskModel
+@using System.Data;
+
+<h2>TASK ASSIGN</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskBody)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpireDate)
+        </th>
+        <th>
+            @Html.LabelFor(model => model.PriorityID, "Priority")
+        </th>
+        <th>
+            @Html.LabelFor(model => model.TCName, "Category")
+        </th>
+        <th>
+            @Html.LabelFor(model => model.UserID, "Users")
+        </th>
+    </tr>
+
+    @{int dynamicid = 0;
+      
+      }
+    @foreach (DataRow dr in Model.List.Rows)
+    {
+        
+            
+        
+   <tr>
+        <td>
+            @dr["TaskID"]
+        </td>
+        <td>
+            @dr["Title"]
+        </td>
+        <td>
+            @dr["Date"]
+        </td>
+        <td>
+            @dr["TaskBody"]
+        </td>
+        <td>
+            @dr["ExpireDate"]
+        </td>
+        <td>
+
+            @*PRIORITY DROPDOWN*@
+
+                <select class="" id="PriorityID_@dynamicid" onchange="priorityEdits('@dr["TaskID"]','@dynamicid')" name="PriorityName">
+                    <option>Select Category</option>
+                    @foreach (System.Data.DataRow pr in Model.ListPriority.Rows)
+                    {
+                        if (@pr["PriorityID"].ToString() == dr["PriorityID"].ToString())
+                        {
+                            <option value="@pr["PriorityID"]" selected>@pr["PriorityName"]</option>
+                        }
+                        else
+                        {
+                            <option value="@pr["PriorityID"]">@pr["PriorityName"]</option>
+                        }
+                    }
+                </select>
+
+
+        </td>
+        <td>
+
+            @*CATEGORY DROPDOWN*@
+            <select class="" id="TCName_@dynamicid" onchange="categoryEdits('@dr["TaskID"]','@dynamicid')" name="TCName">
+                <option>Select Category</option>
+                @foreach (System.Data.DataRow cat in Model.ListCategory.Rows)
+                {
+                    if (@cat["TaskCatID"].ToString() == dr["TaskCatID"].ToString())
+                    {
+                        <option value="@cat["TaskCatID"]" selected>@cat["TCName"]</option>
+                    }
+                    else
+                    {
+                        <option value="@cat["TaskCatID"]">@cat["TCName"]</option>
+                    }
+                }
+            </select>
+
+
+            @*@dr["TaskCatID"]*@
+        </td>
+        <td>
+            @*USER DROPDOWN*@
+            <select class="" id="UserID_@dynamicid" onchange="userEdits('@dr["TaskID"]','@dynamicid')" name="UserName">
+                <option>Select Category</option>
+                @foreach (System.Data.DataRow u in Model.ListUser.Rows)
+                {
+                    if (@u["UserID"].ToString() == dr["UserID"].ToString())
+                    {
+                        <option value="@u["UserID"]" selected>@u["FullName"]</option>
+
+                    }
+                    else
+                    {
+                        <option value="@u["UserID"]">@u["FullName"]</option>
+
+                    }
+                }
+            </select>
+
+
+        </td>
+    </tr>
+        dynamicid = dynamicid + 1;
+        
+        
+       
+        
+        
+}
+
+</table>
+
+
+
+
+
+
+
+
+<script>
+    function priorityEdit(id) {
+        debugger;
+        var val = $("#PriorityID").val();
+
+        $.ajax({
+            url: '/Task/Edit',
+            type: "POST",
+            date: { id: id },
+            async: true,
+
+            success: function (res) {
+                    alert("success");
+                    $div.load('/Task/TaskList');
+                
+
+            }
+        })
+
+        }
+
+    //function priorityEdits(id, count) {
+    //    debugger;
+    //    var val = $("#PriorityID_"+count).val();
+    //    $.ajax({
+    //        url: '/Task/Edit',
+    //        type: "POST",
+    //        data: { id: id, TaskID: val  },
+    //        async: true,
+    //        success: function (result) {
+    //                if (result.Status === "error") {
+    //                    alert(result.Status + "<br/>" + result.Message + "<br/>" + result.Status);
+    //                    return false;
+    //                 }
+    //                },
+    //            });
+    //            $.post("", val, function (res) {
+
+    //                alert("success");
+    //            })
+    //}
+
+    // TASK/EDI CATEGORY EDIT DROPDOWN
+
+    function priorityEdits(id, count) {
+        debugger;
+        var val = $("#PriorityID_" + count).val();
+        $.ajax({
+            url: '/Task/Edit',
+            type: "POST",
+            data: { id: id, TaskID: val , type: "p"},
+            async: true,
+            success: function (res) {
+                alert(res);
+                $div.load('/Task/TaskList');
+
+            }
+        })
+    }
+    function categoryEdits(id, count) {
+        debugger;
+        var val = $("#TCName_" + count).val();
+        $.ajax({
+            url: '/Task/Edit',
+            type: "POST",
+            data: { id: id, TaskID: val, type: "c" },
+            async: true,
+            success: function (res) {
+                alert(res);
+                $div.load('/Task/TaskList');
+
+            }
+        })
+    }
+
+    // TASK/EDI USER EDIT DROPDOWN
+
+    function userEdits(id, count) {
+        debugger;
+        var val = $("#UserID_" + count).val();
+        $.ajax({
+            url: '/Task/Edit',
+            type: "POST",
+            data: { id: id, TaskID: val, type: "u" },
+            async: true,
+            success: function (res) {
+                alert(res);
+                $div.load('/Task/TaskList');
+
+            }
+        })
+    }
+   
+</script>

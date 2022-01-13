@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<button type="button" onclick="modalAddTask()" class="btn btn-success">ADD TASK</button>
+
+@*modal*@
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modalContent">
+
+        </div>
+    </div>
+</div>
+
+@*TASK LIST PARTIAL*@
+<div id="divTaskList"></div>
